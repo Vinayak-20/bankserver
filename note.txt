@@ -1,0 +1,141 @@
+//..........................BACKEND................//
+
+CREATION 
+.new folder==> open command prompt==>Enter git init==> press enter to all suggestion
+
+ .To install express
+    cmd==> npm i express  
+
+.............................................................................................
+
+STEPS TO CREATE SERVER
+
+1. import express
+
+   .to import we use ->  require('express')
+   .to store this imported data we use - const expess=require('expess')
+
+
+
+2. create an app using express (works at 3000 series)
+
+    .to create app we use -> const app=express()
+
+
+
+
+3. create port number
+    .to set a port we use -> app.listen(3000,()=>{
+        console.log("server started at prt number 3000)
+    })
+
+
+
+
+4. create request according to our project
+
+
+............................................................................................
+to continousle run the node server we use
+ .nodemon Server,
+   so to install this we use the command==> nodemon index.js
+
+..............................
+
+JWT(JSON WEB TOKEN)
+
+   .it is used for user authentication
+   .a library is used for user authentication- jsonwebtoken
+   .command used to install - npm i jsonwebtoken
+   .method to generate token- sign()
+   .method to verify tokens- verify()
+
+
+.............................................
+
+Middlewares-
+ .Middlewares have the capacity to control server request.
+ .its a function with 3 arguments (request,response,next)
+ 
+ .to create Middlewares we should-
+                 first create a function
+ 
+ .two types if Middlewares-
+                   1.Application specific Middlewares
+
+                   2.Router specific Middlewares
+
+
+ .........................................................................
+
+ SOLVING RUN-TIME ERROR IN JS
+
+ try-catch
+    
+     try{
+        "errror causing code"
+     }
+     catch{
+        "solution"
+     }
+   .catch only works if an error occurs  
+
+...................................................
+
+MONGO DB
+
+.to get mongodb we should install mongodb server
+
+. shell commands in mongodb
+
+     . to see the data base
+          we use a command->show dbs
+           
+     . to open any one data base
+          we use a command-> use database_name
+
+     . to view collections inside database
+          we use a command-> show collections
+
+     . to view datas inside collections
+          we use the command-> db.collection_name.find()
+  
+     . to view any single data inside collection
+          we use a command-> db.collection_name.findOne({unique data to identify})
+
+     . to insert new data
+          we use a command-> db.collection_name.insertOne({data})
+
+     . to view any single data according to the condition
+          we use a  command-> db.collection_name.findOnr({condito})
+
+     . to delete
+          if single data we use-> db.collectionname.deleteOne({data})
+                when we give delete we will get delete count= one
+                 if deleted is not processed delete count will be= 0
+
+     . update
+         to update we use command-> db.collection_name.updateOne({data to be update},{new data})
+
+    
+
+
+
+
+
+       
+ 
+      
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+
+
+
+
+
+
+
+
+
