@@ -1,6 +1,9 @@
+const db = require('./db.js')
+
+
 // import jsonwebtoken
 
-const jwt= require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
 
 
@@ -14,32 +17,88 @@ userDetails = {
 
 // function for register
 
+// register = (acno, uname, psw) => {
+
+//    return db.User.findOne({ acno }).then(user => {
+//         if (user) {
+//             return {
+//                 statusCode: 401,
+//                 status: false,
+//                 message: "user already exist"
+//             }
+
+//         }
+//         else {
+//             const newuser = new db.User({
+//                 acno,
+//                 username: uname,
+//                 password: psw,
+//                 balance: 0,
+//                 transaction: []
+
+
+
+
+//             })
+//             newuser.save()
+//             return {
+//                 statusCode: 200,
+//                 status: true,
+//                 message: "registration success"
+//             }
+//         }
+
+//     })
+
+// if (acno in userDetails) {
+//     return {
+//         statusCode: 401,
+//         status: false,
+//         message: "user already exist"
+//     }
+// }
+// else {
+//     userDetails[acno] = { acno, username: uname, password: psw, balance: 0, transaction: [] }
+
+// }
+
+
 register = (acno, uname, psw) => {
-    if (acno in userDetails) {
-        return {
-            statusCode: 401,
-            status: false,
-            message: "user already exist"
+    return db.User.findOne({ acno }).then(user => {
+        if (user) {
+            return {
+                statusCode: 401,
+                status: false,
+                message: "user already exist"
+            }
         }
-    }
-    else {
-        userDetails[acno] = { acno, username: uname, password: psw, balance: 0, transaction: [] }
-        return {
-            statusCode: 200,
-            status: true,
-            message: "registration success"
+        else {
+            const newuser = new db.User({
+                acno,
+                username: uname,
+                password: psw,
+                balance: 0,
+                transaction: []
+            })
+            newuser.save()
+            return {
+                statusCode: 200,
+                status: true,
+                message: "Registration success"
+            }
         }
-    }
+    })
+
 }
+
 
 // function of login....
 
 login = (acno, psw) => {
 
-    if (acno in userDetails) {
-        if (psw == userDetails[acno]["password"]) {
-            const token=jwt.sign({currentAcno:acno},'secretkey24')
-
+    return db.User.findOne({ acno, password: psw }).then(user => {
+        if (user) {
+            const token = jwt.sign({ currentAcno: acno }, 'secretkey24')
             return {
                 statusCode: 200,
                 status: true,
@@ -47,127 +106,176 @@ login = (acno, psw) => {
                 token
             }
 
+
         }
         else {
             return {
                 statusCode: 401,
                 status: false,
-                message: "incorrect password"
+                message: "incorrect password or accountnumber"
             }
+
         }
-    }
-    else {
-        return {
-            statusCode: 401,
-            status: false,
-            message: "incorrect account number"
-        }
-    }
+
+    })
 }
+
+// if (acno in userDetails) {
+//     if (psw == userDetails[acno]["password"]) {
+
+//         return {
+//             statusCode: 200,
+//             status: true,
+//             message: "login success",
+//             token
+//         }
+
+
+//     }
+//     else {
+//         return {
+//             statusCode: 401,
+//             status: false,
+//             message: "incorrect password"
+//         }
+//     }
+// }
+// else {
+//     return {
+//         statusCode: 401,
+//         status: false,
+//         message: "incorrect account number"
+//     }
+// }
+
 
 
 // ...function of deposit...........
 
-deposit = (acno, passsword, amount) => {
+deposit = (acno, password, amount) => {
     var amnt = parseInt(amount)
-    if (acno in userDetails) {
-        if (passsword == userDetails[acno]["password"]) {
-            userDetails[acno]["balance"] += amnt
-            userDetails[acno]["transaction"].push({ type:'CREDIT', amount: amnt })
+
+    return db.User.findOne({ acno, password }).then(user => {
+
+        if (user) {
+            user.balance += amnt
+            user.transaction.push({ type: 'CREDIT', amount: amnt })
+            user.save()   //(to reflect in data base we use save)
+
 
             return {
                 statusCode: 200,
                 status: true,
-                message: userDetails[acno]["balance"]
+                message: `${user.balance}`
             }
+
 
         }
         else {
             return {
                 statusCode: 401,
                 status: false,
-                message: "incorrect password"
+                message: "incorrect account number or password"
             }
+
         }
-    }
-    else {
-        return {
-            statusCode: 401,
-            status: false,
-            message: "incorrect account number"
-        }
-    }
+    })
 
 }
 
 
 //   ......function of withdraw.....
 
-withdraw=(acno,passsword,amount)=> {
-    var amnt = parseInt(amount)
-    if (acno in userDetails) {
-      if (passsword == userDetails[acno]["password"]) {
-        if (amnt <= userDetails[acno]["balance"]) {
-          userDetails[acno]["balance"] -= amnt
-          userDetails[acno]["transaction"].push({ type: 'DEBIT', amount: amnt })
 
-          return {
-            statusCode: 200,
-            status: true,
-            message:userDetails[acno]["balance"]
+withdraw = (acno, password, amount) => {
+
+    var amnt = parseInt(amount);
+
+    return db.User.findOne({ acno, password }).then(user => {
+        if (user) {
+
+            if (user.balance >= amnt) {
+                user.balance -= amnt;
+                user.transaction.push({ type: 'DEBIT', amount: amnt })
+                user.save();
+
+                return {
+                    statusCode: 200,
+                    status: true,
+                    message: user.balance
+
+                };
+
+            }
+            else {
+                return {
+                    statusCode: 401,
+                    status: false,
+                    message: 'insufficient balance'
+
+                };
+            }
+
 
         }
 
-        }
+
         else {
+
             return {
                 statusCode: 401,
                 status: false,
-                message: "insufficient balance"
-            }
+                message: 'incorrect acno or  password'
 
+            };
         }
-      }
-      else {
-        return {
-            statusCode: 401,
-            status: false,
-            message: "incorrect password"
-        }      }
+    })
 
-    }
-    else {
-        return {
-            statusCode: 401,
-            status: false,
-            message: "incorrect account number"
-        }  
-      }
-
-  }
+}
 
 //   .......transaction...........
 
-  
-  gettransaction=(acno)=> {
-    if(acno in userDetails){
-        return {
-            statusCode: 200,
-            status: true,
-            message: userDetails[acno]["transaction"]
-        }  
 
-    }
-    else{
-        return {
-            statusCode: 401,
-            status: false,
-            message: "incorrect account number"
-        }  
+gettransaction = (acno) => {
 
-    }
+    return db.User.findOne({acno}).then(user=>{
 
-  }
+        if(user){
+
+            return {
+                statusCode: 200,
+                status: true,
+                message: user.transaction
+            }
+
+        }
+        else{
+            return {
+                statusCode: 401,
+                status: false,
+                message: "incorrect account number"
+            }
+
+        }
+    })
+    // if (acno in userDetails) {
+    //     return {
+    //         statusCode: 200,
+    //         status: true,
+    //         message: userDetails[acno]["transaction"]
+    //     }
+
+    // }
+    // else {
+    //     return {
+    //         statusCode: 401,
+    //         status: false,
+    //         message: "incorrect account number"
+    //     }
+
+    // }
+
+}
 
 
 

@@ -107,7 +107,7 @@ MONGO DB
           we use a command-> db.collection_name.insertOne({data})
 
      . to view any single data according to the condition
-          we use a  command-> db.collection_name.findOnr({condito})
+          we use a  command-> db.collection_name.findOne({condito})
 
      . to delete
           if single data we use-> db.collectionname.deleteOne({data})
@@ -117,7 +117,54 @@ MONGO DB
      . update
          to update we use command-> db.collection_name.updateOne({data to be update},{new data})
 
+.........................................................................................................
+
+SERVER MONGODB INTERGRATION
+
+   .we have library known as 'mongoose' which is used to intergrate database and server.
+   .to install it we use a command-> npm i mongoose  
+
+..............................................................................
+
+STEPS for server mdb INTERGRATION
+
+ 1. import mongoose
     
+
+ 2. state connection string via mongoose
+      .to integrate mongodb
+      .give any database which is neede
+      .for integration we use Parser
+      .during integration there will be chance of error. so to solve the Parser related error we use "NewParser"
+
+ 
+ 3. define a bank database Model
+      .model name should be defined in singular
+      .we need a schema
+      .schema means what all field is needed
+
+     
+ 
+ 4. export the schema to use in another files
+
+
+
+
+
+
+..........................................................................................
+                ANGULAR SERVER INTERGRATION/FRONTEND-BACKEND INTERGRATION
+
+
+.To integrate angular and node we use a module called- CORS(CROSS ORIGIN RESOURCE SHARING)
+
+.4200-3000 host
+
+.npm i cors
+
+
+
+
 
 
 

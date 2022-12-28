@@ -1,3 +1,10 @@
+// import cors
+
+const cors=require('cors')
+
+
+
+
 // import data service file from service folder
 
 // we use a variable to store the data 
@@ -28,6 +35,11 @@ const { response } = require("express");
 // create app
 
 const app = express()
+
+//.......................................................///
+
+// connect frontend
+app.use(cors({origin:'http://localhost:4200/'}))
 
 //.....................................................................//
 
@@ -76,9 +88,10 @@ app.use(express.json())
 app.post('/register', (req, res) => {
 
 
-    const result = dataServices.register(req.body.acno, req.body.uname, req.body.psw)
+    dataServices.register(req.body.acno, req.body.uname, req.body.psw).then(result=>{
 
     res.status(result.statusCode).json(result)
+    })
 
 
 
@@ -94,12 +107,11 @@ app.post('/register', (req, res) => {
 app.post('/login', (req, res) => {
 
 
-    const result = dataServices.login(req.body.acno, req.body.psw)
+   dataServices.login(req.body.acno, req.body.psw).then(result=>{
 
     res.status(result.statusCode).json(result)
 
-
-
+   })
 })
 
 
@@ -113,9 +125,12 @@ app.post('/login', (req, res) => {
 app.post('/deposit',jwtmiddleware, (req, res) => {
 
 
-    const result = dataServices.deposit(req.body.acno, req.body.password, req.body.amount)
+    dataServices.deposit(req.body.acno, req.body.password, req.body.amount).then(result=>{
+        
+        res.status(result.statusCode).json(result)
 
-    res.status(result.statusCode).json(result)
+    })
+
 
 
 
@@ -131,9 +146,12 @@ app.post('/deposit',jwtmiddleware, (req, res) => {
 app.post('/withdraw',jwtmiddleware, (req, res) => {
 
 
-    const result = dataServices.withdraw(req.body.acno, req.body.password, req.body.amount)
+    dataServices.withdraw(req.body.acno, req.body.password, req.body.amount).then(result=>{
+        res.status(result.statusCode).json(result)
 
-    res.status(result.statusCode).json(result)
+
+    })
+
 
 
 
@@ -148,9 +166,12 @@ app.post('/withdraw',jwtmiddleware, (req, res) => {
 app.get('/gettransaction',jwtmiddleware, (req, res) => {
 
 
-    const result = dataServices.gettransaction(req.body.acno)
+     dataServices.gettransaction(req.body.acno).then(result=>{
+        res.status(result.statusCode).json(result)
 
-    res.status(result.statusCode).json(result)
+        
+     })
+
 
 
 
@@ -158,7 +179,7 @@ app.get('/gettransaction',jwtmiddleware, (req, res) => {
 
 app.listen(3000, () => {
 
-    // console.log("server started at prt number 3000");
+    console.log("server started at prt number 3000");
 
 })
 
